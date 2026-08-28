@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TxType {
+  INCOME
+  EXPENSE
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  type      TxType
+  amount    Decimal  @db.Decimal(12, 2)
+  category  String
+  note      String   @default("")
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date, type])
+  @@index([type])
+}
