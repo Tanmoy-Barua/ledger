@@ -50,11 +50,6 @@ The app is built for **Vercel + Neon Postgres**. I cannot attach your personal V
 | `NEXT_PUBLIC_LOCALE` | `en-US` |
 
 3. Deploy. The first production build runs `prisma migrate deploy` and creates the `Transaction` table.
-4. After the first deploy, optionally seed sample rows from your machine:
-
-```bash
-DATABASE_URL="your-neon-url" npx prisma db seed
-```
 
 Your live link is the Vercel domain shown after deploy, for example `https://ledger-xxxx.vercel.app`.
 
@@ -67,7 +62,6 @@ cp .env.example .env
 # set DATABASE_URL to your Postgres URL
 npm install
 npx prisma migrate deploy
-npx prisma db seed
 npm run dev
 ```
 
@@ -89,5 +83,4 @@ The bundled local URL in `.env.example` is:
 | --- | --- |
 | `npm run dev` | Dev server on port 43147 |
 | `npm run build` | Generate Prisma client, apply migrations, production build |
-| `npm run db:seed` | Insert sample earnings/expenses if the table is empty |
 | `npm run lint` | ESLint |
