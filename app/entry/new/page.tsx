@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createTransactionAction } from "@/app/actions";
+import { AppHeader } from "@/components/app-header";
 import { EntryForm } from "@/components/entry-form";
 import { parseMonth } from "@/lib/money";
 
@@ -15,7 +16,9 @@ export default async function NewEntryPage({
   const defaultDate = today.startsWith(month) ? today : `${month}-01`;
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-lg flex-col gap-6 px-4 py-10">
+    <div className="min-h-screen">
+      <AppHeader />
+      <main className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-10">
       <div>
         <Link href={`/?month=${month}`} className="text-sm text-muted-foreground hover:text-foreground">
           ← Back to ledger
@@ -33,6 +36,7 @@ export default async function NewEntryPage({
         defaultDate={defaultDate}
         submitLabel="Save entry"
       />
-    </main>
+      </main>
+    </div>
   );
 }

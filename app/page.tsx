@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { deleteTransactionAction, logoutAction } from "@/app/actions";
+import { deleteTransactionAction } from "@/app/actions";
+import { AppHeader } from "@/components/app-header";
 import { CategoryChart, DailyChart, TrendChart } from "@/components/charts";
-import { MonthNav } from "@/components/month-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/table";
 import { getMonthDashboard } from "@/lib/dashboard";
 import { formatMoney, parseMonth } from "@/lib/money";
-import { ArrowDownRight, ArrowUpRight, Scale, Wallet } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Scale } from "lucide-react";
 
 export default async function HomePage({
   searchParams,
@@ -36,29 +36,7 @@ export default async function HomePage({
 
   return (
     <div className="min-h-screen bg-[radial-gradient(1000px_circle_at_0%_-10%,oklch(0.96_0.03_155),transparent_45%),radial-gradient(800px_circle_at_100%_0%,oklch(0.96_0.03_25),transparent_40%)]">
-      <header className="border-b bg-background/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-700 text-white">
-              <Wallet className="size-5" />
-            </div>
-            <div>
-              <p className="text-lg font-semibold tracking-tight">Ledger</p>
-              <p className="text-sm text-muted-foreground">
-                Earnings, expenses, and the month they belong to
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <MonthNav month={month} />
-            <form action={logoutAction}>
-              <Button variant="outline" type="submit">
-                Sign out
-              </Button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <AppHeader month={month} />
 
       <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 pb-16">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
