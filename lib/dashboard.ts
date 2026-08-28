@@ -107,7 +107,7 @@ export async function getMonthDashboard(month: string) {
       .sort((a, b) => b.value - a.value),
     trend: [...trendMap.entries()].map(([key, values]) => ({
       month: key,
-      label: new Date(`${key}-01T00:00:00.000Z`).toLocaleDateString("en-IN", {
+      label: new Date(`${key}-01T00:00:00.000Z`).toLocaleDateString("en-US", {
         month: "short",
         timeZone: "UTC",
       }),

@@ -20,7 +20,7 @@ Change `AUTH_EMAIL` and `AUTH_PASSWORD` in Vercel (and locally in `.env`) if you
 - Edit and delete entries
 - Data lives in PostgreSQL (Neon on Vercel, or Postgres on your machine)
 
-Amounts are shown in Indian Rupees (`INR`). Change `NEXT_PUBLIC_CURRENCY` if you need another ISO currency code.
+Amounts are shown in US dollars (`USD`).
 
 ## GitHub
 
@@ -46,8 +46,8 @@ The app is built for **Vercel + Neon Postgres**. I cannot attach your personal V
 | `AUTH_EMAIL` | `tanmoy@ledger.app` |
 | `AUTH_PASSWORD` | `Moon92#Ledger!` |
 | `SESSION_SECRET` | a long random string (32+ characters) |
-| `NEXT_PUBLIC_CURRENCY` | `INR` |
-| `NEXT_PUBLIC_LOCALE` | `en-IN` |
+| `NEXT_PUBLIC_CURRENCY` | `USD` |
+| `NEXT_PUBLIC_LOCALE` | `en-US` |
 
 3. Deploy. The first production build runs `prisma migrate deploy` and creates the `Transaction` table.
 4. After the first deploy, optionally seed sample rows from your machine:

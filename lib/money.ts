@@ -1,5 +1,5 @@
-export const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY ?? "INR";
-export const LOCALE = process.env.NEXT_PUBLIC_LOCALE ?? "en-IN";
+export const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY ?? "USD";
+export const LOCALE = process.env.NEXT_PUBLIC_LOCALE ?? "en-US";
 
 export function formatMoney(amount: number) {
   return new Intl.NumberFormat(LOCALE, {
