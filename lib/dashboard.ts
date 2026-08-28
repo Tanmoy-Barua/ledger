@@ -11,6 +11,19 @@ export type LedgerTransaction = {
   date: string;
 };
 
+export async function getTransaction(id: string): Promise<LedgerTransaction | null> {
+  const row = await prisma.transaction.findUnique({ where: { id } });
+  if (!row) return null;
+  return {
+    id: row.id,
+    type: row.type,
+    amount: toNumber(row.amount),
+    category: row.category,
+    note: row.note,
+    date: row.date.toISOString().slice(0, 10),
+  };
+}
+
 export async function getMonthDashboard(month: string) {
   const { start, end } = monthBounds(month);
   const sixStart = monthBounds(shiftMonth(month, -5)).start;

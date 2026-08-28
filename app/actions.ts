@@ -57,11 +57,16 @@ function parseTransaction(formData: FormData) {
   };
 }
 
+function monthQuery(date: Date) {
+  return `/?month=${date.toISOString().slice(0, 7)}`;
+}
+
 export async function createTransactionAction(formData: FormData) {
   await requireSession();
   const data = parseTransaction(formData);
   await prisma.transaction.create({ data });
   revalidatePath("/");
+  redirect(monthQuery(data.date));
 }
 
 export async function updateTransactionAction(formData: FormData) {
@@ -71,12 +76,15 @@ export async function updateTransactionAction(formData: FormData) {
   const data = parseTransaction(formData);
   await prisma.transaction.update({ where: { id }, data });
   revalidatePath("/");
+  redirect(monthQuery(data.date));
 }
 
 export async function deleteTransactionAction(formData: FormData) {
   await requireSession();
   const id = String(formData.get("id") ?? "");
   if (!id) throw new Error("Missing transaction");
+  const existing = await prisma.transaction.findUnique({ where: { id } });
   await prisma.transaction.delete({ where: { id } });
   revalidatePath("/");
+  redirect(existing ? monthQuery(existing.date) : "/");
 }

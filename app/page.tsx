@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { logoutAction } from "@/app/actions";
+import Link from "next/link";
+import { deleteTransactionAction, logoutAction } from "@/app/actions";
 import { CategoryChart, DailyChart, TrendChart } from "@/components/charts";
-import { DeleteButton } from "@/components/delete-button";
 import { MonthNav } from "@/components/month-nav";
-import { TransactionDialog } from "@/components/transaction-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -71,8 +71,24 @@ export default async function HomePage({
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <TransactionDialog defaultType="INCOME" />
-            <TransactionDialog defaultType="EXPENSE" />
+            <Link
+              href={`/entry/new?type=INCOME&month=${month}`}
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "bg-emerald-700 text-white hover:bg-emerald-800"
+              )}
+            >
+              Add earning
+            </Link>
+            <Link
+              href={`/entry/new?type=EXPENSE&month=${month}`}
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "bg-rose-700 text-white hover:bg-rose-800"
+              )}
+            >
+              Add expense
+            </Link>
           </div>
         </div>
 
@@ -181,9 +197,19 @@ export default async function HomePage({
                         {formatMoney(tx.amount)}
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end">
-                          <TransactionDialog mode="edit" initial={tx} />
-                          <DeleteButton id={tx.id} />
+                        <div className="flex justify-end gap-1">
+                          <Link
+                            href={`/entry/${tx.id}/edit`}
+                            className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+                          >
+                            Edit
+                          </Link>
+                          <form action={deleteTransactionAction}>
+                            <input type="hidden" name="id" value={tx.id} />
+                            <Button type="submit" variant="ghost" size="sm" className="text-destructive">
+                              Delete
+                            </Button>
+                          </form>
                         </div>
                       </TableCell>
                     </TableRow>

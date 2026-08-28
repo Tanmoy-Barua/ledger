@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { formatMonthLabel, shiftMonth } from "@/lib/money";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function MonthNav({ month }: { month: string }) {
   const prev = shiftMonth(month, -1);
@@ -9,15 +10,23 @@ export function MonthNav({ month }: { month: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <Button variant="outline" size="icon" render={<Link href={`/?month=${prev}`} />} aria-label="Previous month">
+      <Link
+        href={`/?month=${prev}`}
+        aria-label="Previous month"
+        className={cn(buttonVariants({ variant: "outline", size: "icon" }))}
+      >
         <ChevronLeft />
-      </Button>
+      </Link>
       <p className="min-w-40 text-center text-sm font-medium sm:min-w-48 sm:text-base">
         {formatMonthLabel(month)}
       </p>
-      <Button variant="outline" size="icon" render={<Link href={`/?month=${next}`} />} aria-label="Next month">
+      <Link
+        href={`/?month=${next}`}
+        aria-label="Next month"
+        className={cn(buttonVariants({ variant: "outline", size: "icon" }))}
+      >
         <ChevronRight />
-      </Button>
+      </Link>
     </div>
   );
 }
