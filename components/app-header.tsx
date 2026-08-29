@@ -1,29 +1,61 @@
 import { CircleUser, ChevronDown, LogOut, Wallet } from "lucide-react";
+import Link from "next/link";
 import { logoutAction } from "@/app/actions";
 import { MonthNav } from "@/components/month-nav";
 import { buttonVariants } from "@/components/ui/button";
 import { getLoginCredentials } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
-export function AppHeader({ month }: { month?: string }) {
+export function AppHeader({
+  month,
+  monthHrefBase = "/",
+  current = "dashboard",
+}: {
+  month?: string;
+  monthHrefBase?: string;
+  current?: "dashboard" | "entries";
+}) {
   const { email } = getLoginCredentials();
+  const monthQuery = month ? `?month=${month}` : "";
 
   return (
     <header className="border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-700 text-white">
+          <Link
+            href="/"
+            className="flex size-10 items-center justify-center rounded-xl bg-emerald-700 text-white"
+          >
             <Wallet className="size-5" />
-          </div>
+          </Link>
           <div>
             <p className="text-lg font-semibold tracking-tight">Ledger</p>
-            <p className="text-sm text-muted-foreground">
-              Earnings, expenses, and the month they belong to
-            </p>
+            <nav className="flex gap-3 text-sm">
+              <Link
+                href={`/${monthQuery}`}
+                className={cn(
+                  current === "dashboard"
+                    ? "font-medium text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href={`/entries${monthQuery}`}
+                className={cn(
+                  current === "entries"
+                    ? "font-medium text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Monthly entries
+              </Link>
+            </nav>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {month ? <MonthNav month={month} /> : null}
+          {month ? <MonthNav month={month} hrefBase={monthHrefBase} /> : null}
           <AccountMenu email={email} />
         </div>
       </div>

@@ -20,8 +20,8 @@ export default async function NewEntryPage({
       <AppHeader />
       <main className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-10">
       <div>
-        <Link href={`/?month=${month}`} className="text-sm text-muted-foreground hover:text-foreground">
-          ← Back to ledger
+        <Link href={`/entries?month=${month}`} className="text-sm text-muted-foreground hover:text-foreground">
+          ← Back to monthly entries
         </Link>
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">
           {type === "INCOME" ? "Add earning" : "Add expense"}

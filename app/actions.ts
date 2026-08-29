@@ -58,7 +58,7 @@ function parseTransaction(formData: FormData) {
 }
 
 function monthQuery(date: Date) {
-  return `/?month=${date.toISOString().slice(0, 7)}`;
+  return `/entries?month=${date.toISOString().slice(0, 7)}`;
 }
 
 export async function createTransactionAction(formData: FormData) {
@@ -66,6 +66,7 @@ export async function createTransactionAction(formData: FormData) {
   const data = parseTransaction(formData);
   await prisma.transaction.create({ data });
   revalidatePath("/");
+  revalidatePath("/entries");
   redirect(monthQuery(data.date));
 }
 
@@ -76,6 +77,7 @@ export async function updateTransactionAction(formData: FormData) {
   const data = parseTransaction(formData);
   await prisma.transaction.update({ where: { id }, data });
   revalidatePath("/");
+  revalidatePath("/entries");
   redirect(monthQuery(data.date));
 }
 
@@ -86,5 +88,6 @@ export async function deleteTransactionAction(formData: FormData) {
   const existing = await prisma.transaction.findUnique({ where: { id } });
   await prisma.transaction.delete({ where: { id } });
   revalidatePath("/");
-  redirect(existing ? monthQuery(existing.date) : "/");
+  revalidatePath("/entries");
+  redirect(existing ? monthQuery(existing.date) : "/entries");
 }

@@ -4,14 +4,21 @@ import { formatMonthLabel, shiftMonth } from "@/lib/money";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export function MonthNav({ month }: { month: string }) {
+export function MonthNav({
+  month,
+  hrefBase = "/",
+}: {
+  month: string;
+  hrefBase?: string;
+}) {
   const prev = shiftMonth(month, -1);
   const next = shiftMonth(month, 1);
+  const prefix = hrefBase.includes("?") ? `${hrefBase}&` : `${hrefBase}?`;
 
   return (
     <div className="flex items-center gap-2">
       <Link
-        href={`/?month=${prev}`}
+        href={`${prefix}month=${prev}`}
         aria-label="Previous month"
         className={cn(buttonVariants({ variant: "outline", size: "icon" }))}
       >
@@ -21,7 +28,7 @@ export function MonthNav({ month }: { month: string }) {
         {formatMonthLabel(month)}
       </p>
       <Link
-        href={`/?month=${next}`}
+        href={`${prefix}month=${next}`}
         aria-label="Next month"
         className={cn(buttonVariants({ variant: "outline", size: "icon" }))}
       >

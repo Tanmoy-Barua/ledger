@@ -1,10 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { deleteTransactionAction } from "@/app/actions";
 import { AppHeader } from "@/components/app-header";
 import { CategoryChart, DailyChart, TrendChart } from "@/components/charts";
-import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -13,14 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { getMonthDashboard } from "@/lib/dashboard";
 import { formatMoney, parseMonth } from "@/lib/money";
 import { ArrowDownRight, ArrowUpRight, Scale } from "lucide-react";
@@ -36,7 +26,7 @@ export default async function HomePage({
 
   return (
     <div className="min-h-screen bg-[radial-gradient(1000px_circle_at_0%_-10%,oklch(0.96_0.03_155),transparent_45%),radial-gradient(800px_circle_at_100%_0%,oklch(0.96_0.03_25),transparent_40%)]">
-      <AppHeader month={month} />
+      <AppHeader month={month} current="dashboard" />
 
       <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 pb-16">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -49,6 +39,12 @@ export default async function HomePage({
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
+            <Link
+              href={`/entries?month=${month}`}
+              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+            >
+              Monthly entries
+            </Link>
             <Link
               href={`/entry/new?type=INCOME&month=${month}`}
               className={cn(
@@ -123,78 +119,6 @@ export default async function HomePage({
           </CardHeader>
           <CardContent>
             <TrendChart data={data.trend} />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Entries</CardTitle>
-            <CardDescription>Every earning and expense dated in this month</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {data.transactions.length === 0 ? (
-              <div className="rounded-lg border border-dashed px-4 py-10 text-center">
-                <p className="font-medium">Nothing recorded yet</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Add your salary, freelance income, rent, or groceries to see totals and graphs.
-                </p>
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Note</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.transactions.map((tx) => (
-                    <TableRow key={tx.id}>
-                      <TableCell className="whitespace-nowrap">{tx.date}</TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={tx.type === "INCOME" ? "secondary" : "destructive"}
-                        >
-                          {tx.type === "INCOME" ? "Earning" : "Expense"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{tx.category}</TableCell>
-                      <TableCell className="max-w-48 truncate text-muted-foreground">
-                        {tx.note || "—"}
-                      </TableCell>
-                      <TableCell
-                        className={`text-right font-medium ${
-                          tx.type === "INCOME" ? "text-emerald-800" : "text-rose-800"
-                        }`}
-                      >
-                        {tx.type === "INCOME" ? "+" : "−"}
-                        {formatMoney(tx.amount)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
-                          <Link
-                            href={`/entry/${tx.id}/edit`}
-                            className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
-                          >
-                            Edit
-                          </Link>
-                          <form action={deleteTransactionAction}>
-                            <input type="hidden" name="id" value={tx.id} />
-                            <Button type="submit" variant="ghost" size="sm" className="text-destructive">
-                              Delete
-                            </Button>
-                          </form>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
           </CardContent>
         </Card>
       </main>
