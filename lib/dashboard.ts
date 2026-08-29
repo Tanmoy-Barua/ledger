@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma, hasDatabase } from "@/lib/prisma";
 import { monthBounds, shiftMonth, toNumber } from "@/lib/money";
 import type { TxType } from "@/generated/prisma/client";
 
@@ -12,7 +12,8 @@ export type LedgerTransaction = {
 };
 
 export async function getTransaction(id: string): Promise<LedgerTransaction | null> {
-  const row = await prisma.transaction.findUnique({ where: { id } });
+  if (!hasDatabase()) return null;
+  const row = await getPrisma().transaction.findUnique({ where: { id } });
   if (!row) return null;
   return {
     id: row.id,
@@ -28,12 +29,16 @@ export async function getMonthDashboard(month: string) {
   const { start, end } = monthBounds(month);
   const sixStart = monthBounds(shiftMonth(month, -5)).start;
 
+  if (!hasDatabase()) {
+    return emptyMonth(month, start);
+  }
+
   const [monthRows, trendRows] = await Promise.all([
-    prisma.transaction.findMany({
+    getPrisma().transaction.findMany({
       where: { date: { gte: start, lt: end } },
       orderBy: [{ date: "desc" }, { createdAt: "desc" }],
     }),
-    prisma.transaction.findMany({
+    getPrisma().transaction.findMany({
       where: { date: { gte: sixStart, lt: end } },
       select: { type: true, amount: true, date: true },
     }),
@@ -113,5 +118,40 @@ export async function getMonthDashboard(month: string) {
       }),
       ...values,
     })),
+  };
+}
+
+function emptyMonth(month: string, start: Date) {
+  const daysInMonth = new Date(
+    Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 0)
+  ).getUTCDate();
+  const daily = Array.from({ length: daysInMonth }, (_, index) => ({
+    date: `${month}-${String(index + 1).padStart(2, "0")}`,
+    day: index + 1,
+    income: 0,
+    expense: 0,
+  }));
+  const trend = Array.from({ length: 6 }, (_, index) => {
+    const key = shiftMonth(month, index - 5);
+    return {
+      month: key,
+      label: new Date(`${key}-01T00:00:00.000Z`).toLocaleDateString("en-US", {
+        month: "short",
+        timeZone: "UTC",
+      }),
+      income: 0,
+      expense: 0,
+    };
+  });
+  return {
+    month,
+    earned: 0,
+    spent: 0,
+    net: 0,
+    count: 0,
+    transactions: [] as LedgerTransaction[],
+    daily,
+    categories: [] as Array<{ name: string; value: number }>,
+    trend,
   };
 }

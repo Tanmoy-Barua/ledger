@@ -25,6 +25,8 @@ import { getMonthDashboard } from "@/lib/dashboard";
 import { formatMoney, parseMonth } from "@/lib/money";
 import { ArrowDownRight, ArrowUpRight, Scale } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage({
   searchParams,
 }: {

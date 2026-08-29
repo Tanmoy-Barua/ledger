@@ -7,7 +7,7 @@ import {
   destroySession,
   requireSession,
 } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { categoriesFor } from "@/lib/categories";
 import { revalidatePath } from "next/cache";
 
@@ -64,7 +64,7 @@ function monthQuery(date: Date) {
 export async function createTransactionAction(formData: FormData) {
   await requireSession();
   const data = parseTransaction(formData);
-  await prisma.transaction.create({ data });
+  await getPrisma().transaction.create({ data });
   revalidatePath("/");
   revalidatePath("/entries");
   redirect(monthQuery(data.date));
@@ -75,7 +75,7 @@ export async function updateTransactionAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) throw new Error("Missing transaction");
   const data = parseTransaction(formData);
-  await prisma.transaction.update({ where: { id }, data });
+  await getPrisma().transaction.update({ where: { id }, data });
   revalidatePath("/");
   revalidatePath("/entries");
   redirect(monthQuery(data.date));
@@ -85,8 +85,8 @@ export async function deleteTransactionAction(formData: FormData) {
   await requireSession();
   const id = String(formData.get("id") ?? "");
   if (!id) throw new Error("Missing transaction");
-  const existing = await prisma.transaction.findUnique({ where: { id } });
-  await prisma.transaction.delete({ where: { id } });
+  const existing = await getPrisma().transaction.findUnique({ where: { id } });
+  await getPrisma().transaction.delete({ where: { id } });
   revalidatePath("/");
   revalidatePath("/entries");
   redirect(existing ? monthQuery(existing.date) : "/entries");

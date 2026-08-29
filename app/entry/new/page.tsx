@@ -4,6 +4,8 @@ import { AppHeader } from "@/components/app-header";
 import { EntryForm } from "@/components/entry-form";
 import { parseMonth } from "@/lib/money";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewEntryPage({
   searchParams,
 }: {
