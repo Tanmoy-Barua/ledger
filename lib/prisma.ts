@@ -6,7 +6,7 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 const DEFAULT_DATABASE_URL =
-  "postgresql://neondb_owner:npg_S2kK8uZOIQsU@ep-weathered-sea-ayy58rmv-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require";
+  "postgresql://neondb_owner:npg_rgNnmypYq52a@ep-silent-firefly-aes9ag38-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require";
 
 export function databaseUrl() {
   return process.env.DATABASE_URL || DEFAULT_DATABASE_URL;
