@@ -28,7 +28,11 @@ This project is meant to live on GitHub so Vercel can deploy from it. In Cursor,
 
 ## Live database + live Vercel URL
 
-The app is built for **Vercel + Neon Postgres**. I cannot attach your personal Vercel or Neon accounts from this environment, so the public `*.vercel.app` URL appears after you import the GitHub repo once.
+Production: [https://tanmoy-ledger.vercel.app](https://tanmoy-ledger.vercel.app)
+
+GitHub: [https://github.com/Tanmoy-Barua/ledger](https://github.com/Tanmoy-Barua/ledger)
+
+Saved earnings and expenses live in Neon Postgres. If you created this database from a Cursor/Neon claim link, open that claim URL and attach it to your Neon account so it does not expire.
 
 ### 1. Create a Neon database (free)
 
